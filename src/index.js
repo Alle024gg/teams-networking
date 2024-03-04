@@ -24,7 +24,7 @@ function deleteTeamRequest(id) {
   });
 }
 //make delete teamRequest available from global context
-window.deleteTeamRequest = deleteTeamRequest;
+// delete code window.deleteTeamRequest = deleteTeamRequest;
 
 //console.warn("app ready");
 
@@ -35,7 +35,7 @@ function getTeamAsHTML(team) {
    <td>${team.name}</td>
    <td>${team.url}</td>
    <td>
-     <a href="#" onclick="deleteTeamRequest('${team.id}')">✖️</a>
+     <a href="#" data-id="${team.id}">✖️</a>
    </td>
   </tr>`;
 }
@@ -76,6 +76,14 @@ function onSubmit(e) {
 
 function initEvents() {
   $("#teamsForm").addEventListener("submit", onSubmit);
+  $("#teamsTable tbody").addEventListener("click", e => {
+    if (e.target.matches("a")) {
+      var id = e.target.dataset.id;
+      console.warn("tbody click", id);
+      deleteTeamRequest(id);
+      window.location.reload();
+    }
+  });
 }
 initEvents();
 loadTeams();
