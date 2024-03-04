@@ -78,8 +78,7 @@ function initEvents() {
   $("#teamsForm").addEventListener("submit", onSubmit);
   $("#teamsTable tbody").addEventListener("click", e => {
     if (e.target.matches("a")) {
-      var id = e.target.dataset.id;
-      console.warn("tbody click", id);
+      const id = e.target.dataset.id;
       deleteTeamRequest(id);
       window.location.reload();
     }
