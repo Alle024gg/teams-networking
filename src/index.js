@@ -23,6 +23,16 @@ function deleteTeamRequest(id) {
     body: JSON.stringify({ id: id })
   });
 }
+function updateTeamRequest(team) {
+  fetch("http://localhost:3000/teams-json/update", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(team)
+  });
+}
+
 //make delete teamRequest available from global context
 // delete code window.deleteTeamRequest = deleteTeamRequest;
 
