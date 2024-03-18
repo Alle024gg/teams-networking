@@ -1,8 +1,7 @@
-//functii
 import "./style.css";
 
 let allTeams = [];
-let editId = false;
+let editId;
 
 function $(selector) {
   return document.querySelector(selector);
@@ -27,8 +26,9 @@ function deleteTeamRequest(id) {
     body: JSON.stringify({ id: id })
   });
 }
+
 function updateTeamRequest(team) {
-  fetch("http://localhost:3000/teams-json/update", {
+  return fetch("http://localhost:3000/teams-json/update", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
@@ -37,29 +37,23 @@ function updateTeamRequest(team) {
   });
 }
 
-//make delete teamRequest available from global context
-// delete code window.deleteTeamRequest = deleteTeamRequest;
-
-//console.warn("app ready");
-
 function getTeamAsHTML(team) {
-  return ` <tr>
-   <td>${team.promotion}</td>
-   <td>${team.members}</td>
-   <td>${team.name}</td>
-   <td>${team.url}</td>
-   <td>
-     <a href="#" data-id="${team.id}" class="delete-btn">✖️</a>
-     <a href="#" data-id="${team.id}" class="edit-btn">&#9998;</a>
-
-   </td>
+  return `<tr>
+    <td>${team.promotion}</td>
+    <td>${team.members}</td>
+    <td>${team.name}</td>
+    <td>${team.url}</td>
+    <td>
+      <a href="#" data-id="${team.id}" class="delete-btn">✖</a> 
+      <a href="#" data-id="${team.id}" class="edit-btn">&#9998;</a> 
+    </td>
   </tr>`;
 }
 
 function renderTeams(teams) {
-  //console.warn("render", teams);
+  // console.warn("render", teams);
   const teamsHTML = teams.map(getTeamAsHTML);
-  //console.info(teamsHTML);
+  // console.info(teamsHTML);
 
   $("#teamsTable tbody").innerHTML = teamsHTML.join("");
 }
@@ -72,7 +66,6 @@ function loadTeams() {
       renderTeams(teams);
       return teams;
     });
-  // console.warn("loadTeams", promise);
 }
 
 function getFormValues() {
@@ -96,13 +89,17 @@ function onSubmit(e) {
   let team = getFormValues();
   if (editId) {
     team.id = editId;
-    //console.warn("update", editId, team);
-    updateTeamRequest(team);
+    const req = updateTeamRequest(team);
+    const response = req.then(r => r.json());
+    response.then(status => {
+      if (status.success) {
+        window.location.reload();
+      }
+    });
   } else {
-    console.warn("create");
     createTeamRequest(team);
+    window.location.reload();
   }
-  window.location.reload();
 }
 
 function startEdit(teams, id) {
@@ -122,13 +119,12 @@ function initEvents() {
       window.location.reload();
     } else if (e.target.matches("a.edit-btn")) {
       e.preventDefault();
-      // const id = e.target.getAttribute("data-id");
+      //const id = e.target.getAttribute("data-id");
       const id = e.target.dataset.id;
-      startEdit(id);
+      startEdit(allTeams, id);
     }
   });
 }
 
-//apeluri
 initEvents();
 loadTeams();
