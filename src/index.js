@@ -105,9 +105,9 @@ function onSubmit(e) {
   window.location.reload();
 }
 
-function startEdit(id) {
+function startEdit(teams, id) {
   editId = id;
-  const team = allTeams.find(team => {
+  const team = teams.find(team => {
     return id === team.id;
   });
   setFormValues(team);
