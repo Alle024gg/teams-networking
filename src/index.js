@@ -1,3 +1,4 @@
+//functii
 import "./style.css";
 
 let allTeams = [];
@@ -101,8 +102,7 @@ function onSubmit(e) {
     console.warn("create");
     createTeamRequest(team);
   }
-
-  //window.location.reload();
+  window.location.reload();
 }
 
 function startEdit(id) {
@@ -128,5 +128,7 @@ function initEvents() {
     }
   });
 }
+
+//apeluri
 initEvents();
 loadTeams();
